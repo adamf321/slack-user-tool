@@ -7,4 +7,4 @@ tunnels:
   interview:
     addr: 3000
     proto: http
-    hostname: ${applicant}.interview.workos.dev
+    hostname: adam-fenton.interview.workos.dev
