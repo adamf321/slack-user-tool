@@ -7,10 +7,19 @@ provider:
   runtime: nodejs14.x
 
 functions:
-  processTransactions:
-    handler: src/handler.processTransactions
-    environment:
-      TRANSACTIONS_BUCKET: ${param:transactionsBucket}
+  webhook:
+    handler: src/handlers/webhook.handler
+    events:
+      - http:
+          path: webhook
+          method: post
+          cors: true
+
+# constructs:
+#     user-event-queue:
+#         type: queue
+#         worker:
+#             handler: src/user-event.handler
 
 package:
   patterns:
@@ -18,4 +27,5 @@ package:
 
 plugins:
   - serverless-plugin-typescript
+  # - serverless-lift
   - serverless-offline
