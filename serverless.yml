@@ -1,0 +1,21 @@
+service: aws-node-project
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+
+functions:
+  processTransactions:
+    handler: src/handler.processTransactions
+    environment:
+      TRANSACTIONS_BUCKET: ${param:transactionsBucket}
+
+package:
+  patterns:
+    - "!tests/**"
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
