@@ -21,6 +21,13 @@ functions:
           path: webhook
           method: post
           cors: true
+  ui:
+    handler: src/handlers/ui.handler
+    events:
+      - http:
+          path: /
+          method: get
+          cors: true
 
 constructs:
   user-event:

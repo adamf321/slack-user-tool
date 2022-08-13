@@ -24,4 +24,9 @@ export class UserRepo {
 
     return db.update("users", id, newData as { [key: string]: boolean | string | number });
   }
+
+  get = async (): Promise<User[]> => {
+    const db = new MariaDB();
+    return (await db.get("users")) as User[];
+  }
 }

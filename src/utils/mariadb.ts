@@ -28,7 +28,7 @@ export class MariaDB {
 
   update = async (table: string, id: string, data: { [key: string]: boolean | string | number | null }) => {
     let conn, res;
-  
+
     const fields = Object.keys(data);
     const values = Object.values(data);
 
@@ -42,5 +42,20 @@ export class MariaDB {
     }
 
     if (res.affectedRows === 0) throw Error(`Record with id ${id} not found`);
+  }
+
+  get = async (table: string) => {
+    let conn, res;
+
+    const query = `SELECT * FROM ${table}`;
+
+    try {
+      conn = await MariaDB.pool.getConnection();
+      res = await conn.query(query);
+    } finally {
+      if (conn) conn.release();
+    }
+
+    return res;
   }
 }
