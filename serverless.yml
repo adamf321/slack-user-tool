@@ -5,6 +5,11 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs14.x
+  environment:
+    DB_HOST: workos.cclfxume2xkm.us-east-1.rds.amazonaws.com
+    DB_NAME: slack
+    DB_USER: admin
+    DB_PASSWORD: 12345678
 
 functions:
   webhook:
@@ -15,11 +20,11 @@ functions:
           method: post
           cors: true
 
-# constructs:
-#     user-event-queue:
-#         type: queue
-#         worker:
-#             handler: src/user-event.handler
+constructs:
+  user-event:
+    type: queue
+    worker:
+      handler: src/handlers/user.updater.handler
 
 package:
   patterns:
@@ -27,5 +32,5 @@ package:
 
 plugins:
   - serverless-plugin-typescript
-  # - serverless-lift
+  - serverless-lift
   - serverless-offline
