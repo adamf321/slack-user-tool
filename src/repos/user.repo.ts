@@ -16,4 +16,12 @@ export class UserRepo {
     const db = new MariaDB();
     return db.insert("users", user);
   }
+
+  update = async (user: User) => {
+    const db = new MariaDB();
+    
+    const { id, ...newData } = user;
+
+    return db.update("users", id, newData as { [key: string]: boolean | string | number });
+  }
 }

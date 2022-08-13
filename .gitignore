@@ -4,4 +4,6 @@ node_modules
 .serverless
 .build
 
-out.json
+# DB Workpad
+.vscode/settings.json
+*.session.sql

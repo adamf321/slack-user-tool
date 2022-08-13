@@ -7,11 +7,11 @@ export class MariaDB {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     port: parseInt(process.env.DB_PORT || "3306"),
-    connectionLimit: 5
+    connectionLimit: 1,
   });
 
-  insert = async (table: string, data: { [key: string]: boolean | string | number }) => {
-    let conn, res;
+  insert = async (table: string, data: { [key: string]: boolean | string | number | null }) => {
+    let conn;
 
     const fields = Object.keys(data);
     const values = Object.values(data);
@@ -20,9 +20,27 @@ export class MariaDB {
 
     try {
       conn = await MariaDB.pool.getConnection();
-      res = await conn.query(query, values);
+      await conn.query(query, values);
     } finally {
       if (conn) conn.release();
     }
+  }
+
+  update = async (table: string, id: string, data: { [key: string]: boolean | string | number | null }) => {
+    let conn, res;
+  
+    const fields = Object.keys(data);
+    const values = Object.values(data);
+
+    const query = `UPDATE ${table} SET ${fields.map(f => f + "=?").join(",")} WHERE id = ?`;
+
+    try {
+      conn = await MariaDB.pool.getConnection();
+      res = await conn.query(query, [...values, id]);
+    } finally {
+      if (conn) conn.release();
+    }
+
+    if (res.affectedRows === 0) throw Error(`Record with id ${id} not found`);
   }
 }
