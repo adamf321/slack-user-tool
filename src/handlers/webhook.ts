@@ -5,7 +5,7 @@ import { UserPayload } from "./types";
 
 module.exports.handler = async (event: APIGatewayEvent, context: Context, callback: Callback) => {
   if (!event.body) return callback(Error("Event has no body property"));
-  
+
   let response;
 
   const msg = JSON.parse(event.body);
@@ -19,13 +19,11 @@ module.exports.handler = async (event: APIGatewayEvent, context: Context, callba
   }
 
   if (["team_join", "user_change"].includes(msg.type)) {
-    if (!msg.user) {
-      return callback(Error("The event is missing a user property"));
-    }
+    if (!process.env.QUEUE_URL) return callback(Error("QUEUE_URL is not configured"));
 
-    if (!msg.user.id) {
-      return callback(Error("The user is missing an id property"));
-    }
+    if (!msg.user) return callback(Error("The event is missing a user property"));
+
+    if (!msg.user.id) return callback(Error("The user is missing an id property"));
 
     const queue = new SQS();
 
@@ -43,7 +41,7 @@ module.exports.handler = async (event: APIGatewayEvent, context: Context, callba
       },
     }
 
-    await queue.postMessage("user", payload);
+    await queue.postMessage(process.env.QUEUE_URL, payload);
 
     response = {
       status: "Successfully posted the user",

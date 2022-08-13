@@ -14,6 +14,8 @@ provider:
 functions:
   webhook:
     handler: src/handlers/webhook.handler
+    environment:
+      QUEUE_URL: ${construct:user-event.queueUrl}
     events:
       - http:
           path: webhook
