@@ -1,11 +1,12 @@
 import { Callback, Context, SQSEvent } from "aws-lambda";
 import { UserRepo } from "../repos/user.repo";
+import { logInfo } from "../utils/logger";
 import { UserPayload } from "./types";
 
 module.exports.handler = async (event: SQSEvent, context: Context, callback: Callback) => {
   const userRepo = new UserRepo();
 
-  console.log(event.Records[0].body)
+  logInfo("Event Received", event);
 
   for (const record of event.Records) {
     const payload: UserPayload = typeof record.body === "string" ? JSON.parse(record.body) : record.body;

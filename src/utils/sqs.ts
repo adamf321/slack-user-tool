@@ -1,18 +1,19 @@
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { ConfigService, Queues } from "./config.service";
+import { logInfo } from "./logger";
 
 export class SQS {
   postMessage = async (queue: Queues, message: any) => {
     const config = new ConfigService();
 
     if (config.isOffline()) {
-      console.log(`We are offline. If we were online we would have posted the following to the ${queue} queue:\n${JSON.stringify(message, null, 2)}`);
+      logInfo(`We are offline. If we were online we would have posted the following to the ${queue} queue`, message);
       return;
     }
 
     const sqs = new SQSClient({ region: config.awsRegion() });
 
-    console.log(`Posting to the ${queue} queue:\n${JSON.stringify(message, null, 2)}`);
+    logInfo(`Posting to the ${queue} queue`, message);
 
     await sqs.send(new SendMessageCommand({
       QueueUrl: config.queueUrl(queue),

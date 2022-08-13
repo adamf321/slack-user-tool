@@ -16,8 +16,6 @@ export class MariaDB {
     const fields = Object.keys(data);
     const values = Object.values(data);
 
-    console.log(data, fields, values);
-
     const query = `INSERT INTO ${table} (${fields.join(",")}) VALUES (${fields.map(f => "?").join(",")})`;
 
     try {

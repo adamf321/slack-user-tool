@@ -1,4 +1,5 @@
 import { APIGatewayEvent, Callback, Context } from "aws-lambda";
+import { logInfo } from "../utils/logger";
 import { SQS } from "../utils/sqs";
 import { UserPayload } from "./types";
 
@@ -9,7 +10,7 @@ module.exports.handler = async (event: APIGatewayEvent, context: Context, callba
 
   const msg = JSON.parse(event.body);
 
-  console.log("Event Received\n" + JSON.stringify(msg, null, 2));
+  logInfo("Event Received", event.body);
 
   if (msg.type === "url_verification") {
     response = {
