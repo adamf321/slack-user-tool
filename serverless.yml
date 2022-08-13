@@ -26,7 +26,7 @@ constructs:
   user-event:
     type: queue
     worker:
-      handler: src/handlers/user.updater.handler
+      handler: src/handlers/user-updater.handler
 
 package:
   patterns:
