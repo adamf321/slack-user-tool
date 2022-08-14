@@ -8,9 +8,11 @@ module.exports.handler = async (event: APIGatewayEvent) => {
 
   let response;
 
-  const msg = JSON.parse(event.body);
+  const msg = JSON.parse(event.body).event;
 
-  logInfo("Event Received", event.body);
+  logInfo("Event Received", msg);
+
+  if (!msg.type) throw Error("The event is missing a type property");
 
   if (msg.type === "url_verification") {
     response = {
