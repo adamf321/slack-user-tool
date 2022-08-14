@@ -1,7 +1,6 @@
-import { APIGatewayEvent, Callback, Context } from "aws-lambda";
 import { UserRepo } from "../repos/user.repo";
 
-module.exports.handler = async (event: APIGatewayEvent, context: Context, callback: Callback) => {
+module.exports.handler = async () => {
   const userRepo = new UserRepo();
 
   const users = await userRepo.get();
@@ -17,7 +16,7 @@ module.exports.handler = async (event: APIGatewayEvent, context: Context, callba
         <td>${user.tz}</td>
         <td>${user.status_text}</td>
         <td>${user.status_emoji}</td>
-        <td><img src="${user.image_512}" class="avatar"></td>
+        <td class="avatar"><img src="${user.image_512}"></td>
       </tr>`;
   }
 
@@ -32,10 +31,13 @@ module.exports.handler = async (event: APIGatewayEvent, context: Context, callba
           table, th, td {
             border: 1px solid #9e9e9e;
             border-collapse: collapse;
-            padding: 5px;
+            padding: 10px;
           }
           .avatar {
-            max-width: 70px;
+            padding: 0;
+          }
+          .avatar img {
+            max-width: 80px;
           }
         </style>
       </head>
@@ -59,11 +61,11 @@ module.exports.handler = async (event: APIGatewayEvent, context: Context, callba
       </body>
     </html>`;
 
-  return callback(null, {
+  return  {
     statusCode: 200,
     headers: {
       "Content-Type": "text/html",
     },
     body: html,
-  });
+  };
 }

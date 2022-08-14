@@ -1,9 +1,9 @@
-import { Callback, Context, SQSEvent } from "aws-lambda";
+import { SQSEvent } from "aws-lambda";
 import { UserRepo } from "../repos/user.repo";
 import { logInfo } from "../utils/logger";
 import { UserPayload } from "./types";
 
-module.exports.handler = async (event: SQSEvent, context: Context, callback: Callback) => {
+module.exports.handler = async (event: SQSEvent) => {
   const userRepo = new UserRepo();
 
   logInfo("Event Received", event);
@@ -16,12 +16,12 @@ module.exports.handler = async (event: SQSEvent, context: Context, callback: Cal
         await userRepo.insert(payload.user);
       } catch (e) {
         if (e.code === "ER_DUP_ENTRY") {
-          return callback(null, {
+          return {
             statusCode: 200,
             body: JSON.stringify({
               message: "A record with this id already exists, ignoring this attempt to insert it again",
             }),
-          });
+          };
         }
         throw e;
       }
@@ -34,13 +34,13 @@ module.exports.handler = async (event: SQSEvent, context: Context, callback: Cal
       continue;
     }
 
-    return callback(Error("Unknown operation"));
+    throw Error("Unknown operation");
   }
   
-  return callback(null, {
+  return {
     statusCode: 200,
     body: JSON.stringify({
       message: "Success",
     }),
-  });
+  };
 }

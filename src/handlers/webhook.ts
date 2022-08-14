@@ -1,10 +1,10 @@
-import { APIGatewayEvent, Callback, Context } from "aws-lambda";
+import { APIGatewayEvent } from "aws-lambda";
 import { logInfo } from "../utils/logger";
 import { SQS } from "../utils/sqs";
 import { UserPayload } from "./types";
 
-module.exports.handler = async (event: APIGatewayEvent, context: Context, callback: Callback) => {
-  if (!event.body) return callback(Error("Event has no body property"));
+module.exports.handler = async (event: APIGatewayEvent) => {
+  if (!event.body) throw Error("Event has no body property");
 
   let response;
 
@@ -19,11 +19,11 @@ module.exports.handler = async (event: APIGatewayEvent, context: Context, callba
   }
 
   if (["team_join", "user_change"].includes(msg.type)) {
-    if (!process.env.QUEUE_URL) return callback(Error("QUEUE_URL is not configured"));
+    if (!process.env.QUEUE_URL) throw Error("QUEUE_URL is not configured");
 
-    if (!msg.user) return callback(Error("The event is missing a user property"));
+    if (!msg.user) throw Error("The event is missing a user property");
 
-    if (!msg.user.id) return callback(Error("The user is missing an id property"));
+    if (!msg.user.id) throw Error("The user is missing an id property");
 
     const queue = new SQS();
 
@@ -50,11 +50,11 @@ module.exports.handler = async (event: APIGatewayEvent, context: Context, callba
   }
 
   if (response) {
-    return callback(null, {
+    return {
       statusCode: 200,
       body: JSON.stringify(response),
-    });
+    };
   }
 
-  return callback(Error("Unknown event type"));
+  throw Error("Unknown event type");
 }
