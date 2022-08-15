@@ -133,3 +133,4 @@ Given more time the app could be improved by:
     - Smoke tests against a deployed environment to ensure the app works as expected once deployed (include in the pipeline).
     - Use an IoC container to inject dependencies (e.g. for mocking the database).
     - Implement alerts for failures that we would want to investigate.
+    - Make the solution work for multiple Slack organisations (e.g. store the org identifier in the database).
