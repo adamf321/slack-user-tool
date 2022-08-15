@@ -3,13 +3,13 @@ const mariadb = require("mariadb");
 const { SendMessageCommand, SQSClient } = require("@aws-sdk/client-sqs");
 
 const SLACK_URL = "https://slack.com/api/users.list?limit=200"
-const SLACK_TOKEN = "xoxb-3921443771269-3949371053696-pnB5Gdfv9lUzOkUZ9ZReDKBk";
+const SLACK_TOKEN = process.env.SLACK_TOKEN;
 const AWS_REGION = "us-east-1";
 const SQS_URL = "https://sqs.us-east-1.amazonaws.com/367114526435/aws-node-project-prod-user-event";
 const DB_HOST = "workos.cclfxume2xkm.us-east-1.rds.amazonaws.com";
 const DB_NAME = "slack";
 const DB_USER = "admin";
-const DB_PASSWORD = "12345678";
+const DB_PASSWORD = process.env.DB_PASSWORD;
 
 (async () => {
   const pool = mariadb.createPool({
