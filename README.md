@@ -132,3 +132,4 @@ Given more time the app could be improved by:
     - CI/CD pipeline to run tests and deploy to AWS.
     - Smoke tests against a deployed environment to ensure the app works as expected once deployed (include in the pipeline).
     - Use an IoC container to inject dependencies (e.g. for mocking the database).
+    - Implement alerts for failures that we would want to investigate.
