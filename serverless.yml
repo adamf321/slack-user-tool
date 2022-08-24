@@ -28,6 +28,13 @@ functions:
           path: /
           method: get
           cors: true
+  create_groups:
+    handler: src/handlers/group.handler
+    events:
+      - http:
+          path: group
+          method: post
+          cors: true
 
 constructs:
   user-event:

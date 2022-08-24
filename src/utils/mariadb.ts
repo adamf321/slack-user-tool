@@ -11,7 +11,7 @@ export class MariaDB {
   });
 
   insert = async (table: string, data: { [key: string]: boolean | string | number | null }) => {
-    let conn;
+    let conn, res;
 
     const fields = Object.keys(data);
     const values = Object.values(data);
@@ -20,10 +20,12 @@ export class MariaDB {
 
     try {
       conn = await MariaDB.pool.getConnection();
-      await conn.query(query, values);
+      res = await conn.query(query, values);
     } finally {
       if (conn) conn.release();
     }
+
+    return res;
   }
 
   update = async (table: string, id: string, data: { [key: string]: boolean | string | number | null }) => {
