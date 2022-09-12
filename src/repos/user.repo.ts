@@ -1,4 +1,4 @@
-import { MariaDB } from "../utils/mariadb";
+import { DynamoDB } from "../utils/dynamodb";
 
 export type User = {
   id: string;
@@ -13,12 +13,12 @@ export type User = {
 
 export class UserRepo {
   insert = async (user: User) => {
-    const db = new MariaDB();
+    const db = new DynamoDB();
     return db.insert("users", user);
   }
 
   update = async (user: User) => {
-    const db = new MariaDB();
+    const db = new DynamoDB();
     
     const { id, ...newData } = user;
 
@@ -26,7 +26,7 @@ export class UserRepo {
   }
 
   get = async (): Promise<User[]> => {
-    const db = new MariaDB();
+    const db = new DynamoDB();
     return (await db.get("users")) as User[];
   }
 }

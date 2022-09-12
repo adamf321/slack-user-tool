@@ -10,16 +10,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/workos-code-challenge/adam-fenton.git"
+    "url": "git+https://github.com/adamf321/slack-user-tool.git"
   },
   "author": "Adam Fenton",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/workos-code-challenge/adam-fenton/issues"
+    "url": "https://github.com/adamf321/slack-user-tool/issues"
   },
-  "homepage": "https://github.com/workos-code-challenge/adam-fenton#readme",
+  "homepage": "https://github.com/adamf321/slack-user-tool",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.168.0",
     "@aws-sdk/client-sqs": "^3.145.0",
+    "@aws-sdk/util-dynamodb": "^3.168.0",
     "mariadb": "^3.0.1",
     "serverless": "^3.21.0"
   },

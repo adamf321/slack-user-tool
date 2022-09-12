@@ -1,15 +1,14 @@
-service: aws-node-project
+service: slack-user-tool
 
 frameworkVersion: "3"
 
 provider:
   name: aws
   runtime: nodejs14.x
-  environment:
-    DB_HOST: workos.cclfxume2xkm.us-east-1.rds.amazonaws.com
-    DB_NAME: slack
-    DB_USER: admin
-    DB_PASSWORD: ${ssm:/workos/db-password}
+
+custom:
+  stage: ${opt:stage, 'dev'}
+  ddbUser: ${self:custom.stage}-user
 
 functions:
   webhook:
@@ -34,6 +33,24 @@ constructs:
     type: queue
     worker:
       handler: src/handlers/user-updater.handler
+
+resources:
+  Resources:
+    UserTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.ddbUser}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        PointInTimeRecoverySpecification:
+          PointInTimeRecoveryEnabled: true
 
 package:
   patterns:
