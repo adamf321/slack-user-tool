@@ -1,3 +1,4 @@
+import { ConfigService } from "../utils/config.service";
 import { DynamoDB } from "../utils/dynamodb";
 
 export type User = {
@@ -12,9 +13,11 @@ export type User = {
 };
 
 export class UserRepo {
+  private userTable = (new ConfigService()).userTable();
+
   insert = async (user: User) => {
     const db = new DynamoDB();
-    return db.insert("users", user);
+    return db.insert(this.userTable, user);
   }
 
   update = async (user: User) => {
@@ -22,11 +25,11 @@ export class UserRepo {
     
     const { id, ...newData } = user;
 
-    return db.update("users", id, newData as { [key: string]: boolean | string | number });
+    return db.update(this.userTable, id, newData as { [key: string]: boolean | string | number });
   }
 
   get = async (): Promise<User[]> => {
     const db = new DynamoDB();
-    return (await db.get("users")) as User[];
+    return (await db.get(this.userTable)) as User[];
   }
 }

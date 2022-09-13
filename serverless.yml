@@ -5,9 +5,21 @@ frameworkVersion: "3"
 provider:
   name: aws
   runtime: nodejs14.x
+  environment:
+    DDB_USER: ${self:custom.ddbUser}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource: "arn:aws:dynamodb:${self:custom.region}:*:table/${self:custom.stage}-*"
 
 custom:
   stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
   ddbUser: ${self:custom.stage}-user
 
 functions:
